@@ -1,0 +1,16 @@
+#!/bin/sh
+#vi /srv/repos/hub/hooks/post-update
+files=`git diff ..FETCH_HEAD --name-only --diff-filter=ACMRTUXB`
+for file in $files
+do
+  #fileOwners[$file]=`ls -l $file` | awk '{print $3 ":" $4}';
+	#echo $file; echo `ls -l $file | awk '{print $3 ":" $4}'`;
+  #echo $file;  fileName=''; filename=`ls -l $file`; echo $filename; 
+done
+git merge FETCH_HEAD
+for file in $files
+do
+  #sudo chown -R $fileOwners[$file] $file
+  print chown -R $fileOwners[$file] $file
+done
+exec git-update-server-info

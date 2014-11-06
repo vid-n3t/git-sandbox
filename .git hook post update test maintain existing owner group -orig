@@ -1,0 +1,18 @@
+#vi /srv/repos/hub/hooks/post-update
+#!/bin/sh
+cd /srv/www/siteA || exit
+unset GIT_DIR
+git fetch HUB master
+files=`git diff ..FETCH_HEAD --name-only --diff-filter=ACMRTUXB`
+for file in $files
+do
+  fileOwners[$file]='ls -l $file' | awk '{print $3 ":" $4}'; done
+done
+git merge FETCH_HEAD
+for file in $files
+do
+  #sudo chown -R $fileOwners[$file] $file
+  print chown -R $fileOwners[$file] $file
+done
+exec git-update-server-info
+
